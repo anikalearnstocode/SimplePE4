@@ -14,10 +14,14 @@ public abstract class Shape {
     float yVel; // Vertical velocity
     PApplet main; // Reference to PApplet instance
     int circleCount;
+    int midiIndex;
     //boolean isSelected; // State to track if circle is selected
 
+    MelodyManager melodies = null;
+
+
     // Constructor to initialize common attributes
-    Shape(float x_, float y_, float size_, PApplet main_, float xVel_, float yVel_) {
+    Shape(Main main_, float x_, float y_, float size_, float xVel_, float yVel_) {
         this.x = x_; // Set the x-coordinate
         this.y = y_; // Set the y-coordinate
         this.size = size_; // Set the size of the shape
@@ -26,10 +30,12 @@ public abstract class Shape {
         this.yVel = yVel_; // Set Y velocity
         // circleCount = circleCount;
         //this.isSelected = false; // Initialize selection state to false
+        melodies = main_.getMelodyManager();
+
     }
 
     // Create an ArrayList<Shape> to store different shapes based on the provided counts
-    public static ArrayList<Circle> createShapes(int circleCount, PApplet main) {
+    public static ArrayList<Circle> createShapes(int circleCount, Main main) {
         ArrayList<Circle> shapes = new ArrayList<>(); // Initialize the list of shapes
 
         int[] shapeCounts = {circleCount}; // Array to hold shape counts
@@ -37,15 +43,15 @@ public abstract class Shape {
 
         // Generate random shapes based on the specified counts
         for (int i = 0; i < totalShapes; i++) {
-            float size = main.random(5, 10);  // Generate random size for shapes
+            float size = main.random(4, 5);  // Generate random size for shapes
             float x = main.random(main.width); // Generate random x-coordinate
             float y = main.random(main.height); // Generate random y-coordinate
-            float speedX = main.random(-15, 15); // Generate random X velocity
-            float speedY = main.random(-15, 15); // Generate random Y velocity
+            float speedX = main.random(-2, 2); // Generate random X velocity
+            float speedY = main.random(-2, 2); // Generate random Y velocity
 
             // Create specific shapes and add them to the ArrayList<Shape>
             if (i < shapeCounts[0]) {
-                shapes.add(new Circle(x, y, size/4, main, speedX, speedY));
+                shapes.add(new Circle(x, y, size, main, speedX, speedY));
             } 
         }
 
@@ -76,16 +82,22 @@ public abstract class Shape {
     // Common boundary check for all shapes
     public void checkBoundary() {
         // Check for collision with left or right boundaries
+        
         if (x < size / 2 || x > main.width - size / 2) {
             xVel *= -1; // Reverse X velocity
             x = PApplet.constrain(x, size / 2, main.width - size / 2); // Constrain x within boundaries
+            melodies.start(4);
+
         }
 
         // Check for collision with top or bottom boundaries
         if (y < size / 2 || y > main.height - size / 2) {
             yVel *= -1; // Reverse Y velocity
             y = PApplet.constrain(y, size / 2, main.height - size / 2); // Constrain y within boundaries
+            melodies.start(4);
+
         }
+
     }
 
     // Getter for size
@@ -103,54 +115,28 @@ public abstract class Shape {
         return mx >= x - size / 2 && mx <= x + size / 2 && my >= y - size / 2 && my <= y + size / 2;
     }
 
-    // Set color based on selection state and call draw method
-    // public void shapeColor() {
-    //     if (isSelected) {
-    //         main.fill(0, 255, 0); // Set color to green if selected
-    //     } else {
-    //         main.fill(0); // Default color is black
-    //     }
-    //     draw(); // Call the draw method
-    // }
-
-    // // Select the shape
-    // public void select() {
-    //     isSelected = true; // Set selection state to true
-    // }
-
-    // // Deselect the shape
-    // public void deselect() {
-    //     isSelected = false; // Set selection state to false
-    // }
-
     // Check if the shape is clicked based on mouse position
     public boolean isClicked(float mx, float my) {
         return isMouseOver(mx, my); // Return result of mouse over check
     }
 
     // Check for collision with another shape
-    public boolean checkCollision(Shape other) {
+    public void collission(Shape other, int midiIndex) {
         float distance = PApplet.dist(this.x, this.y, other.x, other.y); // Calculate distance between shapes
-        return distance < (this.size / 2 + other.size / 2); // Return true if shapes collide
+
+        if (distance < (this.size / 2 + other.size / 2))
+        {
+            this.xVel *= -1;
+            this.yVel *= -1;
+            other.xVel *= -1;
+            other.yVel *= -1;
+
+            melodies.start(midiIndex);
+
+        }
+        // Return true if shapes collide
     }
 
-    // Handle collision response between this shape and another
-    public void handleCollision(Shape other) {
-        // Reverse the direction of both shapes
-        this.xVel *= -1;
-        this.yVel *= -1;
-        other.xVel *= -1;
-        other.yVel *= -1;
+    abstract void collission(Shape shape);
 
-        // // Calculate overlap and adjust positions to separate the shapes
-        // float overlap = (this.size / 2 + other.size / 2) - PApplet.dist(this.x, this.y, other.x, other.y);
-        // if (overlap > 0) {
-        //     float pushX = (other.x - this.x) / PApplet.dist(this.x, this.y, other.x, other.y);
-        //     float pushY = (other.y - this.y) / PApplet.dist(this.x, this.y, other.x, other.y);
-        //     this.x -= pushX * overlap / 2; // Push this shape away from the other
-        //     this.y -= pushY * overlap / 2; // Push this shape away from the other
-        //     other.x += pushX * overlap / 2; // Push the other shape away from this shape
-        //     other.y += pushY * overlap / 2; // Push the other shape away from this shape
-        // }
-    }
 }

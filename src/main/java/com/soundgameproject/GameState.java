@@ -73,23 +73,6 @@ public abstract class GameState {
 
         
     }
-
-    
-    
-
-//     public void drawBucket() 
-//     {
-//         // Set dimensions for the bucket (rectangle) to match the original bathtub image
-//     bucketX = (main.width - 400) / 2;  // Center the bucket horizontally
-//     bucketY = main.height - 200 - 50;  // Place it near the bottom, with some margin
-//     float bucketWidth = 400;  // Width of the bucket (same as the bathtub image)
-//     float bucketHeight = 200; // Height of the bucket (same as the bathtub image)
-
-//     // Set the color for the bucket and draw the rectangle
-//     main.fill(150, 150, 255); // Light blue color for the bucket
-//     //main.rectMode(PApplet.CENTER);
-//     main.rect(bucketX, bucketY, bucketWidth, bucketHeight); // Draw the bucket rectangle
-// }
     
     // Abstract method for updating game logic, to be implemented by subclasses
     public abstract void update();
@@ -157,29 +140,6 @@ public abstract class GameState {
         }
     }
 
-    // // Mouse drag event handling
-    // public void mouseDragged(int mouseX, int mouseY) {
-    //     if (selectedShape != null) {
-    //         // Update the position of the selected shape
-    //         selectedShape.x = mouseX;
-    //         selectedShape.y = mouseY;
-
-    //         // Check if the selected shape is within the bathtub bounds
-    //         if (selectedShape.x > bucketX && selectedShape.x < bucketX + bucketWidth 
-    //             && selectedShape.y > bucketY && selectedShape.y < bucketY + bucketHeight) {
-    //             incrementScore(); // Increment score if the shape is in the bucket
-    //             System.out.println("Score increased! Current Score: " + totalScore); // Debugging output
-    //         }
-    //     }
-    // }
-
-    // // Mouse release event handling
-    // public void mouseReleased() {
-    //     if (selectedShape != null) {
-    //         selectedShape.deselect(); // Deselect the shape
-    //     }
-    //     selectedShape = null; // Clear selected shape reference
-    // }
 
     // Display the final score count at game over
     public void finalScoreCount() {

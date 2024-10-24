@@ -12,13 +12,11 @@ import processing.core.PApplet;
 // Circle class extends Shape to represent circular particles
 public class Circle extends Shape {
 
-    //float speedX;
-    //float speedY;
     public int color; // Color of the circle
 
     // Constructor for Circle class
-    public Circle(float x_, float y_, float size_, PApplet main_, float xVel_, float yVel_) {
-        super(x_, y_, size_, main_, xVel_, yVel_); // Call to parent class constructor
+    public Circle(float x_, float y_, float size_, Main main_, float xVel_, float yVel_) {
+        super(main_, y_, size_, x_, xVel_, yVel_); // Call to parent class constructor
         this.color = main.color(0); // Set initial color to black
     }
 
@@ -52,13 +50,19 @@ public class Circle extends Shape {
         
         // Check for collisions with other shapes
         for (Shape other : shapes) {
-            if (other != this && checkCollision(other)) {
-                handleCollision(other); // Handle collision with another Circle
+            if (other != this)
+            {
+                collission(other, midiIndex);
             }
         }
     }
 
     // Mouse click event to change color and size of the circle
     @Override
-    public void mouseClicked() {} 
+    public void mouseClicked() {}
+
+    @Override
+    void collission(Shape shape) {
+        super.collission(shape, 3);
+    } 
 }

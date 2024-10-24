@@ -14,10 +14,6 @@ import processing.core.*;
 //make sure this class name matches your file name, if not fix.
 public class Main extends PApplet {
 
-    static MelodyPlayer player; //play a midi sequence
-    static MidiFileToNotes midiNotes; //read a midi file
-    static int noteCount = 0; //index into the array of notes to send to the MIDI file.
-
     GameState currentState; // Reference to the current game state
     TitleState titleState; // State for the title screen
     CircleState circleState; // State for the circle round
@@ -33,7 +29,11 @@ public class Main extends PApplet {
     static FileSystem sys = FileSystems.getDefault();
 
     //the getSeperator() creates the appropriate back or forward slash based on the OS in which it is running -- OS X & Windows use same code :) 
-    static String filePath = "mid" + sys.getSeparator() + "MaryHadALittleLamb.mid"; // path to the midi file -- you can change this to your file location/name
+    static String filePath = "mid" + sys.getSeparator(); // path to the midi file -- you can change this to your file location/name
+
+	String[] midiFiles = {"circleclicked", "startgame", "gameover", "circlescollide", "bordercollide"};
+	
+	MelodyManager melodyManager = new MelodyManager();
 
     public static void main(String[] args) {
         PApplet.main("com.soundgameproject.Main");    
@@ -41,27 +41,33 @@ public class Main extends PApplet {
 
     public void settings() {
         size(800, 600); // Set up the canvas size for the application
-        midiSetup(filePath);
-    }
+		for (int i = 0; i < midiFiles.length; i++) 
+		{
+			melodyManager.addMidiFiles(filePath + midiFiles[i] + ".mid");
+		}
+	}
 
     //doing all the setup stuff for the midi and also make the background black
     public void setup() {
-        player.reset();
 
         // Initialize the game states
         titleState = new TitleState(this);
         circleState = new CircleState(this);
         gameover = new GameOverState(this);
-
         currentState = titleState; // Set the initial state to the title screen
-
-        // Set the initial position for the rectangle (same as the bathtub image)
-    
     }
+
+	public void setupMidiFiles()
+	{
+		for(int i=0; i<midiFiles.length; i++)
+		{
+			melodyManager.addMidiFiles(filePath + midiFiles[i] + ".mid");
+		}
+	}
 
     //play the melody in real-time
     public void draw() {
-        playMelody(); 
+        melodyManager.playMelodies(); 
 
         background(255); // Clear the background to white
         currentState.draw(); // Call the draw method of the current game state
@@ -72,33 +78,9 @@ public class Main extends PApplet {
         }
     }
 
-    //play the midi file using the player -- so sends the midi to an external synth such as Kontakt or a DAW like Ableton or Logic
-    static public void playMelody() {
-        assert(player != null); //this will throw an error if player is null -- eg. if you haven't called setup() first
-        player.play(); //play each note in the sequence -- the player will determine whether is time for a note onset
-    }
-
-    //opens the midi file, extracts a voice, then initializes a melody player with that midi voice (e.g. the melody)
-    static void midiSetup(String filePath) {
-        player = new MelodyPlayer(100, "Bus 1"); //sets up the player with your bus. 
-        player.listDevices(); //prints available midi devices to the console -- find your device
-
-        midiNotes = new MidiFileToNotes(filePath); // creates a new MidiFileToNotes
-
-        midiNotes.setWhichLine(0); // this assumes the melody is midi channel 0
-        noteCount = midiNotes.getPitchArray().size(); //get the number of notes in the midi file
-
-        assert(noteCount > 0); // make sure it got some notes
-
-        //sets the player to the melody to play the voice grabbed from the midi file above
-        player.setMelody(midiNotes.getPitchArray());
-        player.setRhythm(midiNotes.getRhythmArray());
-        player.setStartTimes(midiNotes.getStartTimeArray());
-    }
-
     //start the melody at the beginning again when a key is pressed
     public void keyPressed() {
-        player.reset();
+        //melodyManager.player.reset();
 
         // Handle key presses to switch between game states
         if (key == 'P' || key == 'p') {
@@ -107,7 +89,7 @@ public class Main extends PApplet {
 
         } else if (key == 'R' || key == 'r') {
             currentState = titleState; // Switch back to the title screen state
-			//GameState.totalScore = 0;
+			GameState.score = 0;
         }
 
 		if (currentState instanceof CircleState && (key == 'E' || key == 'e')) 
@@ -146,5 +128,10 @@ public class Main extends PApplet {
         // Delegate mouse pressed event to the current state
         currentState.mousePressed(mouseX, mouseY);
     }
+
+	public MelodyManager getMelodyManager()
+	{
+		return melodyManager;
+	}
 
 }
