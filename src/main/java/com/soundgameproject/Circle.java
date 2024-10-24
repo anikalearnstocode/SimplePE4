@@ -12,6 +12,8 @@ import processing.core.PApplet;
 // Circle class extends Shape to represent circular particles
 public class Circle extends Shape {
 
+    //float speedX;
+    //float speedY;
     public int color; // Color of the circle
 
     // Constructor for Circle class
@@ -23,7 +25,7 @@ public class Circle extends Shape {
     // Draw method to render the circle
     @Override
     public void draw() {
-        drawShape(); // Calls a method to handle any pre-draw setup (if applicable)
+        //drawShape(); // Calls a method to handle any pre-draw setup (if applicable)
         // Set the fill color for the circle
         main.fill(color); // Fill the circle with its color
         main.ellipse(x, y, size, size); // Draw the circle at its position with the given size
@@ -57,8 +59,6 @@ public class Circle extends Shape {
     }
 
     // Mouse click event to change color and size of the circle
-    public void mouseClicked() {
-        color = main.color(0, 255, 0); // Change color to green on click
-        size += 5; // Increase size of the circle by 5 units
-    }
+    @Override
+    public void mouseClicked() {} 
 }

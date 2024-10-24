@@ -23,7 +23,7 @@ public class GameOverState extends GameState {
         
         // Display the game-over message and the final score in the center of the screen
         main.text("Game Over!", main.width / 2, main.height / 2 - 20);
-        main.text("Final Score: " + totalScore, main.width / 2, main.height / 2 + 20);
+        main.text("Final Score: " + score, main.width / 2, main.height / 2 + 20);
         main.text("Press 'R' to Restart", main.width / 2, main.height / 2 + 60);
     }
 
@@ -42,6 +42,7 @@ public class GameOverState extends GameState {
         // Check if the 'R' key or 'r' key is pressed to restart the game
         if (main.key == 'R' || main.key == 'r') {
             main.currentState = main.titleState; // Return to the title screen or reset the game state
+            resetGame();
         }
     }
 }

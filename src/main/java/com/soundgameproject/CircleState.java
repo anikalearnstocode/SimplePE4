@@ -8,6 +8,7 @@
 package com.soundgameproject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class CircleState extends GameState {
     
@@ -28,9 +29,12 @@ public class CircleState extends GameState {
 
     @Override
     public void draw() {
-        drawBucket(); // Draw the bathtub image (method should be implemented in Main)
+        //main.draw(); // Draw the bathtub image (method should be implemented in Main)
         updateAndDrawShapes(); // Update and draw all shapes in the list
         displayScore(); // Display the current score
+
+        displayTimer();
+
     }
 
     @Override
@@ -46,15 +50,15 @@ public class CircleState extends GameState {
     @Override
     public void mousePressed(int mouseX, int mouseY) {
         super.mousePressed(mouseX, mouseY); // Call parent class mousePressed implementation
+        Iterator<Shape> iterator = shapes.iterator();
+        while (iterator.hasNext()) 
+        {
+            Shape shape = iterator.next();
+            if (shape instanceof Circle && shape.isClicked(mouseY, mouseY))
+            {
+                iterator.remove();
+            }
+        }
     }
-
-    @Override
-    public void mouseDragged(int mouseX, int mouseY) {
-        super.mouseDragged(mouseX, mouseY); // Call parent class mouseDragged implementation
-    }
-
-    @Override
-    public void mouseReleased() {
-        super.mouseReleased(); // Call parent class mouseReleased implementation
-    }
+    
 }

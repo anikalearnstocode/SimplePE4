@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 
 public abstract class Shape {
-    // Common properties for all shapes
-    float x, y, size; // Position and size of the shape
-    float xVel; // Horizontal velocity of the shape
-    float yVel; // Vertical velocity of the shape
-    PApplet main; // Reference to the main PApplet instance
-    boolean isSelected; // State to track if the shape is selected
+    float x, y, size; // Position and size
+    float xVel; // Horizontal velocity
+    float yVel; // Vertical velocity
+    PApplet main; // Reference to PApplet instance
+    int circleCount;
+    //boolean isSelected; // State to track if circle is selected
 
     // Constructor to initialize common attributes
     Shape(float x_, float y_, float size_, PApplet main_, float xVel_, float yVel_) {
@@ -24,45 +24,42 @@ public abstract class Shape {
         this.main = main_; // Reference to the PApplet instance
         this.xVel = xVel_; // Set X velocity
         this.yVel = yVel_; // Set Y velocity
-        this.isSelected = false; // Initialize selection state to false
+        // circleCount = circleCount;
+        //this.isSelected = false; // Initialize selection state to false
     }
 
     // Create an ArrayList<Shape> to store different shapes based on the provided counts
-    public static ArrayList<Shape> createShapes(int circleCount, int squareCount, int triangleCount, PApplet main) {
-        ArrayList<Shape> shapes = new ArrayList<>(); // Initialize the list of shapes
+    public static ArrayList<Circle> createShapes(int circleCount, PApplet main) {
+        ArrayList<Circle> shapes = new ArrayList<>(); // Initialize the list of shapes
 
-        int[] shapeCounts = {circleCount, squareCount, triangleCount}; // Array to hold shape counts
-        int totalShapes = circleCount + squareCount + triangleCount; // Calculate total shapes
+        int[] shapeCounts = {circleCount}; // Array to hold shape counts
+        int totalShapes = circleCount; // Calculate total shapes
 
         // Generate random shapes based on the specified counts
         for (int i = 0; i < totalShapes; i++) {
-            float size = main.random(50, 80);  // Generate random size for shapes
+            float size = main.random(5, 10);  // Generate random size for shapes
             float x = main.random(main.width); // Generate random x-coordinate
             float y = main.random(main.height); // Generate random y-coordinate
-            float speedX = main.random(-2, 2); // Generate random X velocity
-            float speedY = main.random(-2, 2); // Generate random Y velocity
+            float speedX = main.random(-15, 15); // Generate random X velocity
+            float speedY = main.random(-15, 15); // Generate random Y velocity
 
             // Create specific shapes and add them to the ArrayList<Shape>
             if (i < shapeCounts[0]) {
-                shapes.add(new Circle(x, y, size, main, speedX, speedY));
-            } else if (i < shapeCounts[0] + shapeCounts[1]) {
-                shapes.add(new Square(x, y, size, main, speedX, speedY));
-            } else {
-                shapes.add(new Triangle(x, y, size, main, speedX, speedY));
-            }
+                shapes.add(new Circle(x, y, size/4, main, speedX, speedY));
+            } 
         }
 
         return shapes; // Return the created list of shapes
     }
 
-    protected void drawShape() {
-        // Set color based on selection state
-        if (isSelected) {
-            main.fill(0, 255, 0); // Green if selected
-        } else {
-            main.fill(0); // Default color is black
-        }
-    }
+    // protected void drawShape() {
+    //     // Set color based on selection state
+    //     if (isSelected) {
+    //         main.fill(0, 255, 0); // Green if selected
+    //     } else {
+    //         main.fill(0); // Default color is black
+    //     }
+    // }
 
     // Abstract methods to be implemented by subclasses
     public abstract void draw();  // Each shape will implement its own drawing logic
@@ -92,14 +89,14 @@ public abstract class Shape {
     }
 
     // Getter for size
-    public float getSize() {
-        return size; // Return size of the shape
-    }
+    // public float getSize() {
+    //     return size; // Return size of the shape
+    // }
 
-    // Setter for size
-    public void setSize(float newSize) {
-        this.size = newSize; // Update size of the shape
-    }
+    // // Setter for size
+    // public void setSize(float newSize) {
+    //     this.size = newSize; // Update size of the shape
+    // }
 
     // Check if the mouse is over the shape
     public boolean isMouseOver(float mx, float my) {
@@ -107,24 +104,24 @@ public abstract class Shape {
     }
 
     // Set color based on selection state and call draw method
-    public void shapeColor() {
-        if (isSelected) {
-            main.fill(0, 255, 0); // Set color to green if selected
-        } else {
-            main.fill(0); // Default color is black
-        }
-        draw(); // Call the draw method
-    }
+    // public void shapeColor() {
+    //     if (isSelected) {
+    //         main.fill(0, 255, 0); // Set color to green if selected
+    //     } else {
+    //         main.fill(0); // Default color is black
+    //     }
+    //     draw(); // Call the draw method
+    // }
 
-    // Select the shape
-    public void select() {
-        isSelected = true; // Set selection state to true
-    }
+    // // Select the shape
+    // public void select() {
+    //     isSelected = true; // Set selection state to true
+    // }
 
-    // Deselect the shape
-    public void deselect() {
-        isSelected = false; // Set selection state to false
-    }
+    // // Deselect the shape
+    // public void deselect() {
+    //     isSelected = false; // Set selection state to false
+    // }
 
     // Check if the shape is clicked based on mouse position
     public boolean isClicked(float mx, float my) {
@@ -145,15 +142,15 @@ public abstract class Shape {
         other.xVel *= -1;
         other.yVel *= -1;
 
-        // Calculate overlap and adjust positions to separate the shapes
-        float overlap = (this.size / 2 + other.size / 2) - PApplet.dist(this.x, this.y, other.x, other.y);
-        if (overlap > 0) {
-            float pushX = (other.x - this.x) / PApplet.dist(this.x, this.y, other.x, other.y);
-            float pushY = (other.y - this.y) / PApplet.dist(this.x, this.y, other.x, other.y);
-            this.x -= pushX * overlap / 2; // Push this shape away from the other
-            this.y -= pushY * overlap / 2; // Push this shape away from the other
-            other.x += pushX * overlap / 2; // Push the other shape away from this shape
-            other.y += pushY * overlap / 2; // Push the other shape away from this shape
-        }
+        // // Calculate overlap and adjust positions to separate the shapes
+        // float overlap = (this.size / 2 + other.size / 2) - PApplet.dist(this.x, this.y, other.x, other.y);
+        // if (overlap > 0) {
+        //     float pushX = (other.x - this.x) / PApplet.dist(this.x, this.y, other.x, other.y);
+        //     float pushY = (other.y - this.y) / PApplet.dist(this.x, this.y, other.x, other.y);
+        //     this.x -= pushX * overlap / 2; // Push this shape away from the other
+        //     this.y -= pushY * overlap / 2; // Push this shape away from the other
+        //     other.x += pushX * overlap / 2; // Push the other shape away from this shape
+        //     other.y += pushY * overlap / 2; // Push the other shape away from this shape
+        // }
     }
 }

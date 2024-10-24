@@ -12,11 +12,11 @@ import processing.core.PApplet;
 
 public abstract class GameState {
     protected Main main; // Reference to the main application
-    protected static int totalScore; // Cumulative score across game states
+    protected static int score; // 
     protected ArrayList<Shape> shapes; // List to store shapes in the current state
     protected Shape selectedShape; // Currently selected shape
-    protected float bucketX, bucketY, bucketWidth, bucketHeight; // Bath tub dimensions
     protected boolean isEndState = false; // Flag to indicate if the game has ended
+    protected int startTime;
     
     // Constructor to link back to the Main application
     public GameState(Main main) {
@@ -29,14 +29,36 @@ public abstract class GameState {
 
     // Increment the score by one
     public static void incrementScore() {
-        totalScore++;
+        score++;
     }
 
     // Display the current score on the screen
     public void displayScore() {
         main.textSize(30); // Set text size
         main.fill(0); // Set text color to black
-        main.text("Score: " + totalScore, 100, 50); // Display score at specified position
+        main.textAlign(PApplet.LEFT, PApplet.TOP); // Align text to top-right corner
+        main.text("Score: " + score, 20, 20); // Display score at specified position
+        
+        main.textAlign(PApplet.CENTER, PApplet.BOTTOM); // Align text to the bottom center
+        main.text("Press E or e to quit", main.width / 2, main.height - 20); // Adjust position for bottom center
+    
+    }
+
+    public void resetGame()
+    {
+        score = 0;
+        main.startTime = main.millis();
+
+    }
+
+    public void displayTimer() {
+        int timeLeft = main.timer - (main.millis() - main.startTime) / 1000; // Calculate time left
+        if (timeLeft < 0) timeLeft = 0; // Ensure the time left doesn't go negative
+
+        main.textSize(24); // Set text size
+        main.fill(0); // Set text color to black
+        main.textAlign(PApplet.RIGHT, PApplet.TOP); // Align text to top-right corner
+        main.text("Time Left: " + timeLeft, main.width - 20, 20); // Display time
     }
 
     // Main draw method to handle the rendering logic
@@ -49,22 +71,25 @@ public abstract class GameState {
             PApplet.println("called");
         }
 
-    
+        
     }
 
-    public void drawBucket() 
-    {
-        // Set dimensions for the bucket (rectangle) to match the original bathtub image
-    bucketX = (main.width - 400) / 2;  // Center the bucket horizontally
-    bucketY = main.height - 200 - 50;  // Place it near the bottom, with some margin
-    float bucketWidth = 400;  // Width of the bucket (same as the bathtub image)
-    float bucketHeight = 200; // Height of the bucket (same as the bathtub image)
+    
+    
 
-    // Set the color for the bucket and draw the rectangle
-    main.fill(150, 150, 255); // Light blue color for the bucket
-    //main.rectMode(PApplet.CENTER);
-    main.rect(bucketX, bucketY, bucketWidth, bucketHeight); // Draw the bucket rectangle
-}
+//     public void drawBucket() 
+//     {
+//         // Set dimensions for the bucket (rectangle) to match the original bathtub image
+//     bucketX = (main.width - 400) / 2;  // Center the bucket horizontally
+//     bucketY = main.height - 200 - 50;  // Place it near the bottom, with some margin
+//     float bucketWidth = 400;  // Width of the bucket (same as the bathtub image)
+//     float bucketHeight = 200; // Height of the bucket (same as the bathtub image)
+
+//     // Set the color for the bucket and draw the rectangle
+//     main.fill(150, 150, 255); // Light blue color for the bucket
+//     //main.rectMode(PApplet.CENTER);
+//     main.rect(bucketX, bucketY, bucketWidth, bucketHeight); // Draw the bucket rectangle
+// }
     
     // Abstract method for updating game logic, to be implemented by subclasses
     public abstract void update();
@@ -80,30 +105,11 @@ public abstract class GameState {
             shape.update(shapes); // Call the shape's update method
             shape.draw();   // Call the shape's draw method
             
-            // Check if the shape is in the bathtub
-            if (isInBucket(shape)) {
-                shapes.remove(i); // Remove shape if it is in the bathtub
-                if (shape == selectedShape) {
-                    incrementScore(); // Increment score if selected shape is removed
-                }
-            }
         }
         // Check if there are no shapes left
         if (shapes.isEmpty()) {
             handleEndState(); // Handle the end of the game
         }
-    }
-
-    // Check if a shape is within the bathtub bounds
-    protected boolean isInBucket(Shape shape) {
-        float[] bucketBounds = getBucketBounds(); // Get bathtub boundaries
-        return shape.x > bucketBounds[0] && shape.x < bucketBounds[0] + bucketBounds[2] &&
-               shape.y > bucketBounds[1] && shape.y < bucketBounds[1] + bucketBounds[3]; // Check position
-    }
-
-    public float[] getBucketBounds() {
-        // Return the boundaries of the rectangle for collision detection
-        return new float[] { bucketX, bucketY, bucketWidth, bucketHeight };
     }
 
     // Handle the end state of the game
@@ -119,13 +125,8 @@ public abstract class GameState {
 
         // Set messages based on the current state
         if (this instanceof CircleState) {
-            endMessage = "All circle toys in the bucket!!";
-            nextStateMessage = "Press T for triangle round!";
-        } else if (this instanceof TriangleState) {
-            endMessage = "All triangle toys in the bucket!";
-            nextStateMessage = "Press S for square round";
-        } else if (this instanceof SquareState) {
-            endMessage = "All squares in the bucket!";
+         {
+            endMessage = "Your time ran out!";
             nextStateMessage = "Game over!";
             finalScoreCount(); // Count final score in square state
         } 
@@ -136,43 +137,49 @@ public abstract class GameState {
         main.textAlign(PApplet.CENTER); // Center align text
         main.text(endMessage, main.width / 2, main.height / 2); // Display end message
         main.text(nextStateMessage, main.width / 3, main.height / 3); // Display next state message
+        
     }
+}
 
     // Mouse press event handling
     public void mousePressed(int mouseX, int mouseY) {
         // Check if any shape is clicked and select it
-        for (Shape shape : shapes) {
-            if (shape.isMouseOver(mouseX, mouseY) || shape.isClicked(mouseX, mouseY)) {
-                shape.select(); // Select the shape
-                selectedShape = shape; // Store reference to the selected shape
-                break; // Exit loop once a shape is selected
+        for (int i = shapes.size() - 1; i >= 0; i--)
+        {
+            Shape shape = shapes.get(i);
+            if (shape.isMouseOver(mouseX, mouseY))
+            {
+                shapes.remove(i);
+                incrementScore();
+                System.out.println("Shape clicked and removed. Current Score: " + score);
+                break;
             }
         }
     }
 
-    // Mouse drag event handling
-    public void mouseDragged(int mouseX, int mouseY) {
-        if (selectedShape != null) {
-            // Update the position of the selected shape
-            selectedShape.x = mouseX;
-            selectedShape.y = mouseY;
+    // // Mouse drag event handling
+    // public void mouseDragged(int mouseX, int mouseY) {
+    //     if (selectedShape != null) {
+    //         // Update the position of the selected shape
+    //         selectedShape.x = mouseX;
+    //         selectedShape.y = mouseY;
 
-            // Check if the selected shape is within the bathtub bounds
-            if (selectedShape.x > bucketX && selectedShape.x < bucketX + bucketWidth 
-                && selectedShape.y > bucketY && selectedShape.y < bucketY + bucketHeight) {
-                incrementScore(); // Increment score if the shape is in the bucket
-                System.out.println("Score increased! Current Score: " + totalScore); // Debugging output
-            }
-        }
-    }
+    //         // Check if the selected shape is within the bathtub bounds
+    //         if (selectedShape.x > bucketX && selectedShape.x < bucketX + bucketWidth 
+    //             && selectedShape.y > bucketY && selectedShape.y < bucketY + bucketHeight) {
+    //             incrementScore(); // Increment score if the shape is in the bucket
+    //             System.out.println("Score increased! Current Score: " + totalScore); // Debugging output
+    //         }
+    //     }
+    // }
 
-    // Mouse release event handling
-    public void mouseReleased() {
-        if (selectedShape != null) {
-            selectedShape.deselect(); // Deselect the shape
-        }
-        selectedShape = null; // Clear selected shape reference
-    }
+    // // Mouse release event handling
+    // public void mouseReleased() {
+    //     if (selectedShape != null) {
+    //         selectedShape.deselect(); // Deselect the shape
+    //     }
+    //     selectedShape = null; // Clear selected shape reference
+    // }
 
     // Display the final score count at game over
     public void finalScoreCount() {

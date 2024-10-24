@@ -21,15 +21,15 @@ public class Main extends PApplet {
     GameState currentState; // Reference to the current game state
     TitleState titleState; // State for the title screen
     CircleState circleState; // State for the circle round
-    TriangleState triangleState; // State for the triangle round
-    SquareState squareState; // State for the square round
     GameOverState gameover; // State for the game-over screen
-
-    float tubX, tubY; // Position coordinates for the bathtub rectangle
-    float pixelWidth = 400; // Width of the rectangle
-    float pixelHeight = 200; // Height of the rectangle
-
-    //make cross-platform
+    
+	public int timer = 10;
+	public int circleCount;
+	public int score = 0;
+	public int startTime;
+	boolean timerStarted = false;
+    
+	//make cross-platform
     static FileSystem sys = FileSystems.getDefault();
 
     //the getSeperator() creates the appropriate back or forward slash based on the OS in which it is running -- OS X & Windows use same code :) 
@@ -51,8 +51,6 @@ public class Main extends PApplet {
         // Initialize the game states
         titleState = new TitleState(this);
         circleState = new CircleState(this);
-        triangleState = new TriangleState(this);
-        squareState = new SquareState(this);
         gameover = new GameOverState(this);
 
         currentState = titleState; // Set the initial state to the title screen
@@ -69,7 +67,7 @@ public class Main extends PApplet {
         currentState.draw(); // Call the draw method of the current game state
 
         // Check for end game condition only when in SquareState
-        if (currentState instanceof SquareState) {
+        if (currentState instanceof CircleState) {
             checkEndCondition();
         }
     }
@@ -105,20 +103,39 @@ public class Main extends PApplet {
         // Handle key presses to switch between game states
         if (key == 'P' || key == 'p') {
             currentState = circleState; // Switch to the circle round state
-        } else if (key == 'T' || key == 't') {
-            currentState = triangleState; // Switch to the triangle round state
-        } else if (key == 'S' || key == 's') {
-            currentState = squareState; // Switch to the square round state
+			timerStarted = false;
+
         } else if (key == 'R' || key == 'r') {
             currentState = titleState; // Switch back to the title screen state
+			//GameState.totalScore = 0;
         }
+
+		if (currentState instanceof CircleState && (key == 'E' || key == 'e')) 
+		{
+			currentState = new GameOverState(this);
+		}
+
     }
 
     private void checkEndCondition() {
         // Check if the current state is SquareState and if it has no remaining shapes
-        if (currentState instanceof SquareState) {
-            if (currentState.shapes.isEmpty()) {
-                int finalScore = GameState.totalScore; // Access the total score
+        if (currentState instanceof CircleState) {
+				if (!timerStarted) 
+				{
+					startTime = millis();
+					timerStarted = true;
+				}
+			int currentTime = millis();
+            if (currentTime - startTime > 8000) 
+			{ 
+				int finalScore = GameState.score; // Access the total score
+                System.out.println("Final Score: " + finalScore);
+				currentState = new GameOverState(this);
+			}
+			
+            if (currentState.shapes.isEmpty()) 
+			{
+                int finalScore = GameState.score; // Access the total score
                 System.out.println("Final Score: " + finalScore); // Debugging output for the final score
                 currentState = new GameOverState(this); // Switch to the game-over state
             }
@@ -130,13 +147,4 @@ public class Main extends PApplet {
         currentState.mousePressed(mouseX, mouseY);
     }
 
-    public void mouseDragged() {
-        // Delegate mouse dragged event to the current state
-        currentState.mouseDragged(mouseX, mouseY);
-    }
-
-    public void mouseReleased() {
-        // Delegate mouse released event to the current state
-        currentState.mouseReleased();
-    }
 }
