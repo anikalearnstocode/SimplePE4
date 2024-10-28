@@ -44,7 +44,7 @@ public abstract class Shape {
             float y = main.random(main.height); // Generate random y-coordinate
             float speedX = main.random(-2, 2); // Generate random X velocity
             float speedY = main.random(-2, 2); // Generate random Y velocity
-            float size = 40; // set default size to 40
+            float size = 25; // set default size to 40
 
             // Add circles to the ArrayList<Shape> if circlecount reaches 0
             if (i < shapeCounts[0]) {
@@ -108,9 +108,7 @@ public abstract class Shape {
             this.yVel *= -1;
             other.xVel *= -1;
             other.yVel *= -1;
-            melodies.start(midiIndex); // play midi sound effect on collission - see subclass
-
-        }
+            ((Main) main).getMelodyManager().start(3);        }
     }
 
     abstract void collission(Shape shape);

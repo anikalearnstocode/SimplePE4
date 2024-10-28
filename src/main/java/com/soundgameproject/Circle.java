@@ -2,7 +2,7 @@
 // Anika Krieger
 // Oct 27
 // Particle Engine 4
-// Description: 
+// Description: Represents circular particles in the game, extending the Shape class.
 
 package com.soundgameproject;
 
@@ -16,7 +16,7 @@ public class Circle extends Shape {
 
     // Constructor for Circle class
     public Circle (float size_, float x_, float y_, Main main_, float xVel_, float yVel_) {
-        super(main_, x_, y_, size_, xVel_, yVel_);
+        super(main_, x_, y_, size_, xVel_, yVel_); 
         this.color = main.color(0); // Set initial color to black
     }
 
@@ -53,20 +53,20 @@ public class Circle extends Shape {
         for (Shape other : shapes) {
             if (other != this)
             {
-                collission(other, midiIndex);
+                collission(other, midiIndex); //handle collission
             }
         }
     }
 
-    // Mouse click event to change color and size of the circle
+    // Mouse click event to play sound effect
     @Override
     public void mouseClicked() {
         ((Main) main).getMelodyManager().start(0);
     }
 
+    // handle collission (play sound effect)
     @Override
     void collission(Shape shape) {
-        //super.collission(shape, 3);
-        ((Main) main).getMelodyManager().start(3);
+       // ((Main) main).getMelodyManager().start(3);
     } 
 }
