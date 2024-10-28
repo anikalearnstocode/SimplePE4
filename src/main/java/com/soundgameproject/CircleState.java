@@ -23,7 +23,7 @@ public class CircleState extends GameState {
     public void initializeShapes() {
         for (int i = 0; i < 15; i++) {
             // Add new Circle objects with random positions and velocities
-            shapes.add(new Circle(main.random(main.width), main.random(main.height), 15, main, main.random(-2, 2), main.random(-2, 2)));
+            shapes.add(new Circle(30, main.random(main.width), main.random(main.height), main, main.random(-2, 2), main.random(-2, 2)));
         }
     }
 
@@ -51,7 +51,7 @@ public class CircleState extends GameState {
             if (shape instanceof Circle && shape.isClicked(mouseY, mouseY))
             {
                 iterator.remove();
-                shape.melodies.start(0);
+                main.getMelodyManager().start(0);
             }
         }
     }

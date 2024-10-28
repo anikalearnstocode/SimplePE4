@@ -52,7 +52,7 @@ public abstract class GameState {
     }
 
     public void displayTimer() {
-        int timeLeft = main.timer - (main.millis() - main.startTime) / 1000; // Calculate time left
+        int timeLeft = main.timer - (main.millis() - main.startTime) / 1500; // Calculate time left
         if (timeLeft < 0) timeLeft = 0; // Ensure the time left doesn't go negative
 
         main.textSize(24); // Set text size
@@ -134,6 +134,7 @@ public abstract class GameState {
             {
                 shapes.remove(i);
                 incrementScore();
+                main.getMelodyManager().start(0);
                 System.out.println("Shape clicked and removed. Current Score: " + score);
                 break;
             }

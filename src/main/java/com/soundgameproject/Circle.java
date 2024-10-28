@@ -7,7 +7,7 @@
 package com.soundgameproject;
 
 import java.util.ArrayList;
-import processing.core.PApplet;
+//import processing.core.PApplet;
 
 // Circle class extends Shape to represent circular particles
 public class Circle extends Shape {
@@ -15,8 +15,8 @@ public class Circle extends Shape {
     public int color; // Color of the circle
 
     // Constructor for Circle class
-    public Circle(float x_, float y_, float size_, Main main_, float xVel_, float yVel_) {
-        super(main_, y_, size_, x_, xVel_, yVel_); // Call to parent class constructor
+    public Circle (float size_, float x_, float y_, Main main_, float xVel_, float yVel_) {
+        super(main_, x_, y_, size_, xVel_, yVel_);
         this.color = main.color(0); // Set initial color to black
     }
 
@@ -42,6 +42,7 @@ public class Circle extends Shape {
         return isMouseOver(mx, my); // Calls method to check if mouse is over the circle
     }
 
+    
     // Update method to handle movement and collision detection
     @Override
     public void update(ArrayList<Shape> shapes) {
@@ -59,10 +60,13 @@ public class Circle extends Shape {
 
     // Mouse click event to change color and size of the circle
     @Override
-    public void mouseClicked() {}
+    public void mouseClicked() {
+        ((Main) main).getMelodyManager().start(0);
+    }
 
     @Override
     void collission(Shape shape) {
-        super.collission(shape, 3);
+        //super.collission(shape, 3);
+        ((Main) main).getMelodyManager().start(3);
     } 
 }

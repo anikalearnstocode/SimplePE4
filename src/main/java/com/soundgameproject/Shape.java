@@ -28,8 +28,6 @@ public abstract class Shape {
         this.main = main_; // Reference to the PApplet instance
         this.xVel = xVel_; // Set X velocity
         this.yVel = yVel_; // Set Y velocity
-        // circleCount = circleCount;
-        //this.isSelected = false; // Initialize selection state to false
         melodies = main_.getMelodyManager();
 
     }
@@ -43,11 +41,11 @@ public abstract class Shape {
 
         // Generate random shapes based on the specified counts
         for (int i = 0; i < totalShapes; i++) {
-            float size = main.random(4, 5);  // Generate random size for shapes
             float x = main.random(main.width); // Generate random x-coordinate
             float y = main.random(main.height); // Generate random y-coordinate
             float speedX = main.random(-2, 2); // Generate random X velocity
             float speedY = main.random(-2, 2); // Generate random Y velocity
+            float size = 30;
 
             // Create specific shapes and add them to the ArrayList<Shape>
             if (i < shapeCounts[0]) {
@@ -58,14 +56,6 @@ public abstract class Shape {
         return shapes; // Return the created list of shapes
     }
 
-    // protected void drawShape() {
-    //     // Set color based on selection state
-    //     if (isSelected) {
-    //         main.fill(0, 255, 0); // Green if selected
-    //     } else {
-    //         main.fill(0); // Default color is black
-    //     }
-    // }
 
     // Abstract methods to be implemented by subclasses
     public abstract void draw();  // Each shape will implement its own drawing logic
@@ -99,16 +89,6 @@ public abstract class Shape {
         }
 
     }
-
-    // Getter for size
-    // public float getSize() {
-    //     return size; // Return size of the shape
-    // }
-
-    // // Setter for size
-    // public void setSize(float newSize) {
-    //     this.size = newSize; // Update size of the shape
-    // }
 
     // Check if the mouse is over the shape
     public boolean isMouseOver(float mx, float my) {

@@ -1,8 +1,8 @@
 package com.soundgameproject;
 
 //importing the JMusic stuff
-import jm.music.data.*;
-import jm.util.*;
+//import jm.music.data.*;
+//import jm.util.*;
 
 //import FileSystem for cross-platform file referencing
 import java.nio.file.FileSystem;
@@ -19,7 +19,7 @@ public class Main extends PApplet {
     CircleState circleState; // State for the circle round
     GameOverState gameover; // State for the game-over screen
     
-	public int timer = 10;
+	public int timer = 15;
 	public int circleCount;
 	public int score = 0;
 	public int startTime;
@@ -31,7 +31,7 @@ public class Main extends PApplet {
     //the getSeperator() creates the appropriate back or forward slash based on the OS in which it is running -- OS X & Windows use same code :) 
     static String filePath = "mid" + sys.getSeparator(); // path to the midi file -- you can change this to your file location/name
 
-	String[] midiFiles = {"circleclicked", "startgame", "gameover", "circlescollide", "bordercollide"};
+	String[] midiFiles = {"circleclicked-piano", "startgame-piano", "gameover-piano", "circlescollide-piano", "bordercollide-piano"};
 	
 	MelodyManager melodyManager = new MelodyManager();
 
@@ -86,6 +86,7 @@ public class Main extends PApplet {
         if (key == 'P' || key == 'p') {
             currentState = circleState; // Switch to the circle round state
 			timerStarted = false;
+			melodyManager.start(1);
 
         } else if (key == 'R' || key == 'r') {
             currentState = titleState; // Switch back to the title screen state
@@ -95,6 +96,7 @@ public class Main extends PApplet {
 		if (currentState instanceof CircleState && (key == 'E' || key == 'e')) 
 		{
 			currentState = new GameOverState(this);
+			melodyManager.start(2);
 		}
 
     }
@@ -113,6 +115,7 @@ public class Main extends PApplet {
 				int finalScore = GameState.score; // Access the total score
                 System.out.println("Final Score: " + finalScore);
 				currentState = new GameOverState(this);
+				melodyManager.start(2);
 			}
 			
             if (currentState.shapes.isEmpty()) 
@@ -120,6 +123,7 @@ public class Main extends PApplet {
                 int finalScore = GameState.score; // Access the total score
                 System.out.println("Final Score: " + finalScore); // Debugging output for the final score
                 currentState = new GameOverState(this); // Switch to the game-over state
+				melodyManager.start(2);
             }
         }
     }

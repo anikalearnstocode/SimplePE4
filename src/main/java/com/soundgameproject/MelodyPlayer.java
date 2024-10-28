@@ -99,7 +99,7 @@ public class MelodyPlayer {
 	//send the melody out in MIDI messages, in correct timing, to the external program
 	void play() 
 	{
-		int vel = 100; //midi velocity -- TODO: change/assign if want to vary
+		int vel = 120; //midi velocity -- TODO: change/assign if want to vary
 		double cur_time = millis(); //what time is it now?
 
 		//send note off messages for any notes that have been playing
@@ -151,6 +151,9 @@ public class MelodyPlayer {
 		playingRhythms.add( rhythm.get(note_index));
 		playingTimes.add( cur_time );
 		playingPitches.add(melody.get(note_index));
+	
+		//System.out.println("Note On: Pitch = " + melody.get(note_index) + ", Velocity = " + vel);
+
 	}
 
 	//send note off messages for the playing notes in our buffers
