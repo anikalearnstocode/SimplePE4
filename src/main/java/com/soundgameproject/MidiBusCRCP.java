@@ -1,21 +1,8 @@
-/*
- * Courtney Brown (2023) slightly modified the code from the MidiBus class, from https://github.com/sparks/themidibus/ 
- * by Severin Smith c2009, LGPL 
- * 
- * The MidiBus is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * Class: MidiBusCRCP
- * Sends midi notes to an external player/midi channel -- does not handle input, listening, etc.
- * 
- * 
- *  Description: Partial functionality of the MidiBus class, from https://github.com/sparks/themidibus/
- *  The fastest way to get the functionality given use of Maven + Git Education tech, as previously was using this processing library
- *  Only checks/uses midi outputs to make things simple -- only using the output for class projects
- * 
- */
+// Class title: MidiBus
+// Anika Krieger
+// Oct 27
+// Particle Engine 4
+// Description: 
 
 package com.soundgameproject;
 

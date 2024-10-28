@@ -1,9 +1,8 @@
-// CircleState.java
+// Class title: CircleState
 // Anika Krieger
-// Sep 30
-// Particle Engine III
-// Description: Manages the state for circle shapes in the Particle Engine game.              Handles shape initialization, drawing, and input events.
-
+// Oct 27
+// Particle Engine 4
+// Description: 
 
 package com.soundgameproject;
 
@@ -21,9 +20,9 @@ public class CircleState extends GameState {
 
     // Method to create and initialize circle shapes
     public void initializeShapes() {
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 10; i++) {
             // Add new Circle objects with random positions and velocities
-            shapes.add(new Circle(30, main.random(main.width), main.random(main.height), main, main.random(-2, 2), main.random(-2, 2)));
+            shapes.add(new Circle(40, main.random(main.width), main.random(main.height), main, main.random(-2, 2), main.random(-2, 2)));
         }
     }
 

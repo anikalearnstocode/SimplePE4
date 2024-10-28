@@ -1,3 +1,9 @@
+// Class title: MelodyManager
+// Anika Krieger
+// Oct 27
+// Particle Engine 4
+// Description: 
+
 package com.soundgameproject;
 
 import java.util.ArrayList;

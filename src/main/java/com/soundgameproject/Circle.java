@@ -1,8 +1,8 @@
-// Circle.java
+// Class title: Circle
 // Anika Krieger
-// Sep 30
-// Particle Engine III
-// Description: Circle - sets up circular particle and movement
+// Oct 27
+// Particle Engine 4
+// Description: 
 
 package com.soundgameproject;
 

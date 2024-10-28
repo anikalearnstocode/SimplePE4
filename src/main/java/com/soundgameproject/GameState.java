@@ -1,8 +1,8 @@
-// GameState.java
-// com.particleengineREAL2
+// Class title: GameState
 // Anika Krieger
-// Particle Engine 3
-// Description: Abstract class representing the game state. Manages shape initialization, score handling, input handling, and state transitions for different shapes.
+// Oct 27
+// Particle Engine 4
+// Description: Abstract class representing the game state. Manages shape initialization, score handling, input handling, and state transitions.
 
 
 package com.soundgameproject;
@@ -12,11 +12,11 @@ import processing.core.PApplet;
 
 public abstract class GameState {
     protected Main main; // Reference to the main application
-    protected static int score; // 
+    protected static int score; // current score
     protected ArrayList<Shape> shapes; // List to store shapes in the current state
     protected Shape selectedShape; // Currently selected shape
     protected boolean isEndState = false; // Flag to indicate if the game has ended
-    protected int startTime;
+    //protected int startTime;  //start time attribute
     
     // Constructor to link back to the Main application
     public GameState(Main main) {
@@ -38,21 +38,19 @@ public abstract class GameState {
         main.fill(0); // Set text color to black
         main.textAlign(PApplet.LEFT, PApplet.TOP); // Align text to top-right corner
         main.text("Score: " + score, 20, 20); // Display score at specified position
-        
         main.textAlign(PApplet.CENTER, PApplet.BOTTOM); // Align text to the bottom center
         main.text("Press E or e to quit", main.width / 2, main.height - 20); // Adjust position for bottom center
-    
     }
 
     public void resetGame()
     {
-        score = 0;
-        main.startTime = main.millis();
+        score = 0; //reset score
+        main.startTime = main.millis(); //reset start time
 
     }
 
     public void displayTimer() {
-        int timeLeft = main.timer - (main.millis() - main.startTime) / 1500; // Calculate time left
+        int timeLeft = main.timer - (main.millis() - main.startTime) / 1000; // Calculate time left
         if (timeLeft < 0) timeLeft = 0; // Ensure the time left doesn't go negative
 
         main.textSize(24); // Set text size
@@ -97,7 +95,7 @@ public abstract class GameState {
 
     // Handle the end state of the game
     protected void handleEndState() {
-        String endMessage = ""; // Message to display at the end
+        //String endMessage = ""; // Message to display at the end
         String nextStateMessage = ""; // Message for the next state
 
         // Set end state flag if not already set
@@ -108,35 +106,33 @@ public abstract class GameState {
 
         // Set messages based on the current state
         if (this instanceof CircleState) {
-         {
-            endMessage = "Your time ran out!";
-            nextStateMessage = "Game over!";
-            finalScoreCount(); // Count final score in square state
-        } 
+            {
+                //endMessage = "Your time ran out!";
+                nextStateMessage = "Game over!";
+                finalScoreCount(); // Count final score in square state
+            } 
 
         // Display end state messages
         main.textSize(40); // Set larger text size for end state
         main.fill(0); // Set text color to black
         main.textAlign(PApplet.CENTER); // Center align text
-        main.text(endMessage, main.width / 2, main.height / 2); // Display end message
+        //main.text(endMessage, main.width / 2, main.height / 2); // Display end message
         main.text(nextStateMessage, main.width / 3, main.height / 3); // Display next state message
-        
+        }
     }
-}
 
     // Mouse press event handling
     public void mousePressed(int mouseX, int mouseY) {
         // Check if any shape is clicked and select it
-        for (int i = shapes.size() - 1; i >= 0; i--)
-        {
+        for (int i = shapes.size() - 1; i >= 0; i--) {
             Shape shape = shapes.get(i);
             if (shape.isMouseOver(mouseX, mouseY))
             {
-                shapes.remove(i);
-                incrementScore();
-                main.getMelodyManager().start(0);
-                System.out.println("Shape clicked and removed. Current Score: " + score);
-                break;
+                shapes.remove(i); // remove shaoe
+                incrementScore(); // increment score
+                main.getMelodyManager().start(0); // play circleclicked sound
+                System.out.println("Shape clicked and removed. Current Score: " + score); // tracker in terminal
+                break; //exit loop after removing shape
             }
         }
     }

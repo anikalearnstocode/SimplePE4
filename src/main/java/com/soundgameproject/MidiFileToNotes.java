@@ -1,12 +1,8 @@
-
-/*
- * c2017 Courtney Brown 
- * 
- * Class: MidiFileToNotes
- * Description: Uses JMusic to get notes & info from a midi file, revised 2024 to include harmony.
- * 
- * 
- */
+// Class title: MidiFileToNotes
+// Anika Krieger
+// Oct 27
+// Particle Engine 4
+// Description: 
 
  package com.soundgameproject;
 

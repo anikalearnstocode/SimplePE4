@@ -1,7 +1,8 @@
-// TitleState.java
+// Class title: TitleState
 // Anika Krieger
-// Sep 30
-// Particle Engine III
+// Oct 27
+// Particle Engine 4
+// Description: 
 // Description: Class representing the title screen state of the game. Displays the game title and instructions to start playing.
 
 package com.soundgameproject;

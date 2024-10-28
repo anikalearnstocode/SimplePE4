@@ -1,7 +1,8 @@
 // GameOverState.java
 // Anika Krieger
-// Sep 30
-//Description: Manages the game-over state, displaying the final score and allowing the player to restart the game.
+// Oct 27
+// Particle Engine 4
+// Description: Manages the game-over state, displaying the final score and allowing the player to restart the game.
 
 package com.soundgameproject;
 
@@ -42,7 +43,7 @@ public class GameOverState extends GameState {
         // Check if the 'R' key or 'r' key is pressed to restart the game
         if (main.key == 'R' || main.key == 'r') {
             main.currentState = main.titleState; // Return to the title screen or reset the game state
-            resetGame();
+            resetGame(); //self explanatory
         }
     }
 }

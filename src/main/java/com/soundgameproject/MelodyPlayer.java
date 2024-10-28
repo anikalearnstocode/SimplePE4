@@ -1,10 +1,8 @@
-/*
- * c2017-c2023 Courtney Brown 
- * 
- * Class: MelodyPlayer
- * Description: Sends a melody of midi notes to an external player/midi channel, revised 2024 for polyphonic playing
- * 
- */
+// Class title: MelodyPlayer
+// Anika Krieger
+// Oct 27
+// Particle Engine 4
+// Description: 
 
  package com.soundgameproject;
  
@@ -87,7 +85,7 @@ public class MelodyPlayer {
 
 	void setBPM(float tempo) {
 		bpm = tempo;
-		notems = (float) (((1.0 / (bpm / 60.0))) * 1000); //how many ms in a 1/4 note for this tempo
+		notems = (float) (((1.0 / (bpm / 60.0))) * 1200); //how many ms in a 1/4 note for this tempo
 	}
 
 	//time since creation of the melody player -- mimics the processing function millis()
