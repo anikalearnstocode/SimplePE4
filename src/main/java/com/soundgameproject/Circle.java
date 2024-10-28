@@ -64,9 +64,5 @@ public class Circle extends Shape {
         ((Main) main).getMelodyManager().start(0);
     }
 
-    // handle collission (play sound effect)
-    @Override
-    void collission(Shape shape) {
-       // ((Main) main).getMelodyManager().start(3);
-    } 
+    void collission(Shape shape) {} 
 }

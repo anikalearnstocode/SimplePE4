@@ -31,7 +31,6 @@ public class TitleState extends GameState {
         main.text("Press 'P' to Play", main.width / 2, main.height / 2 + 20); // Instructions
     }
 
-
     @Override
     public void update() {}
 

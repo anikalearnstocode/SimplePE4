@@ -108,9 +108,9 @@ public abstract class Shape {
             this.yVel *= -1;
             other.xVel *= -1;
             other.yVel *= -1;
-            ((Main) main).getMelodyManager().start(3);        }
+            ((Main) main).getMelodyManager().start(3); // play sound effect     
+        }
     }
 
     abstract void collission(Shape shape);
-
 }
